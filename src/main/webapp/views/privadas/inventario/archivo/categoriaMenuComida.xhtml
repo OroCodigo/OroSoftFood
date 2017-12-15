@@ -1,0 +1,192 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="content">
+		<div class="card" id="panelPrincipal">
+			<h1 class="BigTopic">CATEGORIA</h1>
+			<div class="EmptyBox20"></div>
+			<h:form id="formBusqueda">
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-3 ui-lg-3">
+						<p:selectOneMenu id="comboEmpresa"
+							value="#{categoriaMenuComidaBean.empresa}"
+							styleClass="bz-bb m-w-0 Wid100">
+							<f:selectItem itemLabel="Escoja una Empresa" />
+							<f:selectItems value="#{categoriaMenuComidaBean.listEmpresas}"
+								var="empresa" itemValue="#{empresa.empCodigo}"
+								itemLabel="#{empresa.empRazonSocial}" />
+							<p:ajax event="change"
+								listener="#{categoriaMenuComidaBean.cargarDatos}"
+								update="formBusqueda, :formTabla" />
+						</p:selectOneMenu>
+						<p:outputLabel for="comboEmpresa" value="Empresa"
+							styleClass="label" />
+					</div>
+				</div>
+			</h:form>
+			<h:form id="formTabla">
+				<p:dataTable id="tablaProductoCategoria"
+					emptyMessage="No hay datos a mostrar"
+					value="#{categoriaMenuComidaBean.listInvProductoCategoriaTO}"
+					var="prodCat" reflow="true">
+					<f:facet name="header">
+						<p:commandButton icon="ui-icon-queue" styleClass="secondary"
+							update=":formNuevo,:mensaje"
+							action="#{categoriaMenuComidaBean.limpiarNuevo}" id="btnNuevo"
+							value="Nuevo" />
+					</f:facet>
+					<p:column headerText="Codigo" styleClass="TexAlCenter"
+						sortBy="#{prodCat.catCodigo}" filterBy="#{prodCat.catCodigo}"
+						filterMatchMode="contains">
+						<h:outputLabel value="#{prodCat.catCodigo}" />
+					</p:column>
+					<p:column headerText="Detalle" styleClass="TexAlCenter"
+						sortBy="#{prodCat.catDetalle}" filterBy="#{prodCat.catDetalle}"
+						filterMatchMode="contains">
+						<h:outputLabel value="#{prodCat.catDetalle}" />
+					</p:column>
+					<p:column headerText="Acciones" styleClass="TexAlCenter"
+						width="200">
+						<p:commandButton id="btnModificar" update=":formModificar"
+							onclick="mostarPanelEditar('')" icon="ui-icon-edit">
+							<f:setPropertyActionListener value="#{prodCat}"
+								target="#{categoriaMenuComidaBean.invProductoCategoriaTO}" />
+						</p:commandButton>
+						<p:commandButton id="btnEliminar" update=":formEliminar"
+							onclick="mostarPanelEliminar('')" icon="ui-icon-delete">
+							<f:setPropertyActionListener value="#{prodCat}"
+								target="#{categoriaMenuComidaBean.invProductoCategoriaTO}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</div>
+		<div id="panelInsertar" class="DispNone panelCrud">
+			<h:form id="formNuevo">
+				<div class="tituloPanelCrud">Datos del Nuevo Motivo</div>
+				<div id="datosTalla" class="TexAlLeft Padding1em">
+					<div class="EmptyBox20"></div>
+					<p:selectOneMenu id="comboEmpresa"
+						value="#{categoriaMenuComidaBean.empresa}"
+						styleClass="bz-bb m-w-0 Wid20">
+						<f:selectItem itemLabel="Escoja una Empresa" />
+						<f:selectItems value="#{categoriaMenuComidaBean.listEmpresas}"
+							var="empresa" itemValue="#{empresa.empCodigo}"
+							itemLabel="#{empresa.empRazonSocial}" />
+						<p:ajax event="change"
+							listener="#{categoriaMenuComidaBean.cargarDatos}"
+							update="formBusqueda, :formTabla" />
+					</p:selectOneMenu>
+					<p:outputLabel for="comboEmpresa" value="Empresa"
+						styleClass="label" />
+					<h:panelGroup styleClass="md-inputfield">
+						<p:inputText id="txtCodigo"
+							value="#{categoriaMenuComidaBean.invProductoCategoriaTO.catCodigo}"
+							styleClass="DispBlock convertirMayuscula Wid20" />
+						<p:outputLabel value="Codigo" for="txtCodigo" />
+					</h:panelGroup>
+					<div class="EmptyBox20"></div>
+					<h:panelGroup styleClass="md-inputfield">
+						<p:inputText id="txtDetalle"
+							value="#{categoriaMenuComidaBean.invProductoCategoriaTO.catDetalle}"
+							styleClass="DispBlock convertirMayuscula Wid20" />
+						<p:outputLabel value="Nombre" for="txtDetalle" />
+					</h:panelGroup>
+					<div class="EmptyBox30"></div>
+					<p:selectOneMenu id="comboMenuComida"
+						value="#{categoriaMenuComidaBean.menuCodigo}"
+						styleClass="bz-bb m-w-0 Wid20">
+						<f:selectItem itemLabel="Escoja un Menú" />
+						<f:selectItems
+							value="#{categoriaMenuComidaBean.listInvMenuComida}"
+							var="menuCodigo"
+							itemValue="#{menuCodigo.invMenuComidaPK.menCodigo}"
+							itemLabel="#{menuCodigo.menNombre}" />
+					</p:selectOneMenu>
+					<p:outputLabel for="comboMenuComida" value="Menu Comida"
+						styleClass="label" />
+				</div>
+				<p:commandButton id="btnGuardar" value="Guardar"
+					style="margin-left: 10px !important;" icon="ui-icon-check"
+					actionListener="#{categoriaMenuComidaBean.insertar}"
+					update=":formTabla, :mensaje" />
+				<p:commandButton id="btnCancelar" value="Cancelar"
+					styleClass="secondary" onclick="mostarPanelInsertar('')"
+					style="margin-left: 10px !important;" icon="ui-icon-close" />
+			</h:form>
+		</div>
+		<div id="panelEditar" class="DispNone panelCrud">
+			<h:form id="formModificar">
+				<div class="tituloPanelCrud">Datos del Motivo</div>
+				<div id="datosTalla" class="TexAlLeft Padding1em">
+					<div class="EmptyBox20"></div>
+					<p:selectOneMenu id="comboEmpresa" disabled="true"
+						value="#{categoriaMenuComidaBean.empresa}"
+						styleClass="bz-bb m-w-0 Wid20">
+						<f:selectItem itemLabel="Escoja una Empresa" />
+						<f:selectItems value="#{categoriaMenuComidaBean.listEmpresas}"
+							var="empresa" itemValue="#{empresa.empCodigo}"
+							itemLabel="#{empresa.empRazonSocial}" />
+						<p:ajax event="change"
+							listener="#{categoriaMenuComidaBean.cargarDatos}"
+							update="formBusqueda, :formTabla" />
+					</p:selectOneMenu>
+					<p:outputLabel for="comboEmpresa" value="Empresa"
+						styleClass="label" />
+					<h:panelGroup styleClass="md-inputfield">
+						<p:inputText id="txtCodigo"
+							value="#{categoriaMenuComidaBean.invProductoCategoriaTO.catCodigo}"
+							styleClass="DispBlock convertirMayuscula Wid20" readonly="true" />
+						<p:outputLabel value="Codigo" for="txtCodigo" />
+					</h:panelGroup>
+					<div class="EmptyBox40"></div>
+					<h:panelGroup styleClass="md-inputfield">
+						<p:inputText id="txtDetalle"
+							value="#{categoriaMenuComidaBean.invProductoCategoriaTO.catDetalle}"
+							styleClass="DispBlock convertirMayuscula Wid20" readonly="true" />
+						<p:outputLabel value="Nombre" for="txtDetalle" />
+					</h:panelGroup>
+					<div class="EmptyBox40"></div>
+					<p:selectOneMenu id="comboMenuComida"
+						value="#{categoriaMenuComidaBean.menuCodigo}"
+						styleClass="bz-bb m-w-0 Wid20">
+						<f:selectItem itemLabel="Escoja un Menú" />
+						<f:selectItems
+							value="#{categoriaMenuComidaBean.listInvMenuComida}"
+							var="menuCodigo"
+							itemValue="#{menuCodigo.invMenuComidaPK.menCodigo}"
+							itemLabel="#{menuCodigo.menNombre}" />
+					</p:selectOneMenu>
+					<p:outputLabel for="comboMenuComida" value="Menu Comida"
+						styleClass="label" />
+				</div>
+				<p:commandButton id="btnGuardar" value="Guardar"
+					style="margin-left: 10px !important;" icon="ui-icon-check"
+					actionListener="#{categoriaMenuComidaBean.modificar}"
+					update=":formTabla, :mensaje" />
+				<p:commandButton id="btnCancelar" value="Cancelar"
+					styleClass="secondary" onclick="mostarPanelEditar('')"
+					style="margin-left: 10px !important;" icon="ui-icon-close" />
+			</h:form>
+		</div>
+		<div id="panelEliminar" class="DispNone panelCrud TexAlLeft">
+			<h:form id="formEliminar">
+				<div class="tituloPanelCrud TexAlLeft">Datos del Motivo</div>
+				<div id="datosTalla" class="Padding1em">
+					<h3 class="mensajeEliminar">¿ Esta seguro de eliminar la
+						categoria ?</h3>
+				</div>
+				<p:commandButton id="btnEliminar" value="Eliminar"
+					style="margin-left: 10px !important;" icon="ui-icon-check"
+					actionListener="#{categoriaMenuComidaBean.eliminar}"
+					update=":formTabla, :mensaje" />
+				<p:commandButton id="btnCancelar" value="Cancelar"
+					styleClass="secondary" onclick="mostarPanelEliminar('')"
+					style="margin-left: 10px !important;" icon="ui-icon-close" />
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,1030 @@
+@charset "UTF-8";
+
+.focusCombo {
+	border-color: #03A9F4 !important;
+	border-width: 0 0 2px 0 !important;
+}
+
+.panelCrud {
+	border: 1px solid #bdbdbd;
+	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0
+		rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+	-webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0
+		rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+	-moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0
+		rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+	background: #ffffff;
+	margin-bottom: 16px;
+	box-sizing: border-box;
+	padding-bottom: 1em;
+}
+
+.combo select:focus {
+	border: 1px solid red;
+}
+
+.combo select:active {
+	border: 1px solid red;
+}
+
+.combo:active {
+	border: 1px solid red;
+}
+
+.combo:focus {
+	border: 1px solid red;
+}
+
+.combo label:focus {
+	border: 1px solid red;
+}
+
+.combo label:active {
+	border: 1px solid red;
+}
+
+.height35 {
+	height: 35px;
+}
+
+.height40 {
+	height: 40px;
+}
+
+.camposExportar .ui-chkbox {
+	float: right;
+}
+
+.textAreaGuardar {
+	width: 100%;
+	height: 500px !important;
+	overflow-y: scroll !important;
+}
+
+.soloIcono {
+	background: none !important;
+	-moz-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0), 0 0 0 0 rgba(0, 0, 0, 0)
+		!important;
+	-webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0), 0 0 0 0 rgba(0, 0, 0, 0)
+		!important;
+	box-shadow: 0 0 0 0 rgba(0, 0, 0, 0), 0 0 0 0 rgba(0, 0, 0, 0)
+		!important;
+}
+
+.soloIcono span {
+	color: #03A9F4 !important;
+}
+
+.desabilitar_a {
+	pointer-events: none;
+	visibility: hidden;
+}
+
+.contableTotales {
+	opacity: 1 !important;
+}
+
+.icono {
+	font-family: 'Material Icons' !important;
+}
+
+.iconoColumna {
+	background: transparent !important;
+	box-shadow: 0 0 0 0 rgba(0, 0, 0, 0), 0 0 0 0 rgba(0, 0, 0, 0)
+		!important;
+}
+
+.iconoColumna span.ui-icon {
+	color: #03A9F4 !important;
+}
+
+.columnaCheck {
+	width: 16px !important;
+}
+
+.tabView label {
+	float: right;
+	text-align: right;
+}
+
+.error {
+	border-width: 0 0 2px 0 !important;
+	border-color: #e62a10 !important;
+	padding-bottom: 0px !important;
+}
+
+.tituloPanelCrud {
+	background-color: #03A9F4;
+	color: #ffffff;
+	padding: 1em;
+}
+
+.mensajeEliminar {
+	font-size: 18px;
+	font-weight: 400;
+}
+
+.quitarOpacidad, .quitarOpacidad input, .quitarOpacidad textarea {
+	opacity: 1 !important;
+}
+
+.ui-datatable-scrollable-header, .ui-datatable-scrollable-body {
+	width: 100% !important;
+}
+
+.tituloGrande span {
+	display: inline !important;
+}
+
+.m-w-0 {
+	min-width: 0px !important;
+}
+
+.unaFila {
+	white-space: nowrap;
+}
+
+.calendario input {
+	width: 185px;
+	text-align: center;
+}
+
+.labelVertical {
+	display: block;
+}
+
+.margin2 {
+	margin: 2% !important;
+}
+
+.wid185px {
+	width: 185px;
+}
+
+.m-r-10px {
+	margin-right: 10px;
+}
+
+/* Display */
+.DispBlock {
+	display: block;
+}
+
+.DispTable {
+	display: table;
+	vertical-align: middle;
+}
+
+.DispTableCell {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.DispNone {
+	display: none;
+}
+
+.DispInlBlock {
+	display: inline-block;
+}
+
+.DispInline {
+	display: inline !important;
+}
+
+.Negrita {
+	font-weight: bold;
+}
+
+/* Font Sizes */
+.Fs9 {
+	font-size: 9px !important;
+}
+
+.Fs10 {
+	font-size: 10px !important;
+}
+
+.Fs11 {
+	font-size: 11px !important;
+}
+
+.Fs12 {
+	font-size: 12px !important;
+}
+
+.Fs13 {
+	font-size: 13px !important;
+}
+
+.Fs14 {
+	font-size: 14px !important;
+}
+
+.Fs15 {
+	font-size: 15px !important;
+}
+
+.Fs16 {
+	font-size: 16px !important;
+}
+
+.Fs17 {
+	font-size: 17px !important;
+}
+
+.Fs18 {
+	font-size: 18px !important;
+}
+
+.Fs19 {
+	font-size: 19px !important;
+}
+
+.Fs20 {
+	font-size: 20px !important;
+}
+
+.Fs21 {
+	font-size: 21px !important;
+}
+
+.Fs22 {
+	font-size: 22px !important;
+}
+
+.Fs23 {
+	font-size: 23px !important;
+}
+
+.Fs24 {
+	font-size: 24px !important;
+}
+
+.Fs25 {
+	font-size: 25px !important;
+}
+
+.Fs26 {
+	font-size: 26px !important;
+}
+
+.Fs27 {
+	font-size: 27px !important;
+}
+
+.Fs28 {
+	font-size: 28px !important;
+}
+
+.Fs29 {
+	font-size: 29px !important;
+}
+
+.Fs30 {
+	font-size: 30px !important;
+}
+
+.Fs40 {
+	font-size: 40px !important;
+}
+
+.Fs50 {
+	font-size: 50px !important;
+}
+
+.Fs60 {
+	font-size: 60px !important;
+}
+
+.Fs100 {
+	font-size: 100px !important;
+}
+
+.Fs130 {
+	font-size: 130px !important;
+}
+
+/* Font Type */
+.FontBold {
+	font-weight: bold;
+}
+
+.FontLight {
+	font-weight: lighter;
+}
+
+.FontNormal {
+	font-weight: normal;
+}
+
+/* text colors */
+.grayblue {
+	color: #A7B8C1;
+}
+
+.red {
+	color: #CE2246;
+}
+
+.navyblue {
+	color: #003D50;
+}
+
+.softgray {
+	color: #E8E8E8;
+}
+
+.white {
+	color: #ffffff;
+}
+
+.blue {
+	color: #1C75BC;
+}
+
+.orange {
+	color: #FBB040;
+}
+
+.green {
+	color: #2BB673;
+}
+
+.leaden {
+	color: #778D9B;
+}
+
+/* background colors */
+.grayblueback {
+	background-color: #A7B8C1;
+}
+
+.redback {
+	background-color: #CE2246;
+}
+
+.navyblueback {
+	background-color: #003D50;
+}
+
+.softgrayback {
+	background-color: #E8E8E8;
+}
+
+.whiteback {
+	background-color: #ffffff;
+}
+
+.blueback {
+	background-color: #1C75BC;
+}
+
+.orangeback {
+	background-color: #FBB040;
+}
+
+.greenback {
+	background-color: #2BB673;
+}
+
+.leadenback {
+	background-color: #778D9B;
+}
+
+/* top bordered box */
+.RedBorderedBox {
+	border-top: solid 4px #CE2246;
+}
+
+.NavyBlueBorderedBox {
+	border-top: solid 4px #003D50;
+}
+
+.OrangeBorderedBox {
+	border-top: solid 4px #FBB040;
+}
+
+.GreenBorderedBox {
+	border-top: solid 4px #2BB673;
+}
+
+/* Empty Boxes */
+.EmptyBox5 {
+	display: block;
+	width: 100%;
+	height: 5px;
+	overflow: hidden;
+}
+
+.EmptyBox10 {
+	display: block;
+	width: 100%;
+	height: 10px;
+	overflow: hidden;
+}
+
+.EmptyBox20 {
+	display: block;
+	width: 100%;
+	height: 20px;
+	overflow: hidden;
+}
+
+.EmptyBox25 {
+	display: block;
+	width: 100%;
+	height: 25px;
+	overflow: hidden;
+}
+
+.EmptyBox30 {
+	display: block;
+	width: 100%;
+	height: 30px;
+	overflow: hidden;
+}
+
+.EmptyBox40 {
+	display: block;
+	width: 100%;
+	height: 40px;
+	overflow: hidden;
+}
+
+.EmptyBox50 {
+	display: block;
+	width: 100%;
+	height: 50px;
+	overflow: hidden;
+}
+
+.EmptyBox60 {
+	display: block;
+	width: 100%;
+	height: 60px;
+	overflow: hidden;
+}
+
+.EmptyBox70 {
+	display: block;
+	width: 100%;
+	height: 70px;
+	overflow: hidden;
+}
+
+.EmptyBox80 {
+	display: block;
+	width: 100%;
+	height: 80px;
+	overflow: hidden;
+}
+
+.EmptyBox90 {
+	display: block;
+	width: 100%;
+	height: 90px;
+	overflow: hidden;
+}
+
+.EmptyBox100 {
+	display: block;
+	width: 100%;
+	height: 100px;
+	overflow: hidden;
+}
+
+.EmptyBox110 {
+	display: block;
+	width: 100%;
+	height: 100px;
+	overflow: hidden;
+}
+
+.EmptyBox120 {
+	display: block;
+	width: 100%;
+	height: 100px;
+	overflow: hidden;
+}
+
+.EmptyBox130 {
+	display: block;
+	width: 100%;
+	height: 100px;
+	overflow: hidden;
+}
+
+.EmptyBox140 {
+	display: block;
+	width: 100%;
+	height: 100px;
+	overflow: hidden;
+}
+
+.EmptyBox150 {
+	display: block;
+	width: 100%;
+	height: 150px;
+	overflow: hidden;
+}
+
+/* Width */
+.Wid100 {
+	width: 100% !important;
+}
+
+.Wid90 {
+	width: 90% !important;
+}
+
+.Wid80 {
+	width: 80%;
+}
+
+.Wid70 {
+	width: 70% !important;
+}
+
+.Wid60 {
+	width: 60% !important;
+}
+
+.Wid50 {
+	width: 50%;
+}
+
+.Wid45 {
+	width: 45% !important;
+}
+
+.Wid40 {
+	width: 40% !important;
+}
+
+.Wid30 {
+	width: 30% !important;
+}
+
+/* Width Special Values */
+.Wid33 {
+	width: 33.3% !important;
+}
+
+.Wid25 {
+	width: 25% !important;;
+}
+
+.Wid20 {
+	width: 20% !important;
+}
+
+.Wid50 {
+	width: 50% !important;
+}
+
+.Wid10 {
+	width: 10% !important;
+}
+
+.Wid5 {
+	width: 5% !important;
+}
+
+.WidAuto {
+	width: auto !important;
+}
+
+.MaxWid500 {
+	max-width: 500px;
+}
+
+/* Height */
+.Hei100 {
+	height: 100% !important;
+}
+
+.Hei90 {
+	height: 90% !important;
+}
+
+.Hei80 {
+	height: 80% !important;
+}
+
+.Hei70 {
+	height: 70% !important;
+}
+
+.Hei60 {
+	height: 60% !important;
+}
+
+.Hei40 {
+	height: 40% !important;
+}
+
+.Hei50 {
+	height: 50% !important;
+}
+
+.Hei30 {
+	height: 30% !important;
+}
+
+.Hei20 {
+	height: 20% !important;
+}
+
+.Hei10 {
+	height: 10% !important;
+}
+
+/* Text Aligns */
+.TexAlCenter {
+	text-align: center;
+}
+
+.TexAlLeft {
+	text-align: left;
+}
+
+.TexAlRight {
+	text-align: right !important;
+}
+
+.numeroCentrado input {
+	text-align: center;
+	width: 80%;
+}
+
+.pendiente label, .pendiente {
+	color: #FF0000 !important;
+}
+
+.anulado label, .anulado {
+	color: #999999 !important;
+}
+
+.totales1 label, .totales2 {
+	color: #FF0000 !important;
+}
+
+.saldoInicial label, .saldoInicial {
+	color: #999999 !important;
+}
+
+.ui-datatable-footer {
+	text-align: right !important;
+}
+
+.ui-growl-image-error {
+	background: url("#{resource['ronin-layout:images/delete-red.svg']}")
+		no-repeat !important;
+	background-position: center !important;
+	background-size: 140% !important;
+	margin-top: 5px;
+}
+
+/* Opacidad controles bloqueados */
+.ui-state-disabled, .ui-widget-content .ui-state-disabled,
+	.ui-widget-header .ui-state-disabled {
+	opacity: 0.8;
+	filter: Alpha(Opacity = 50);
+	background-image: none;
+}
+
+.negrita {
+	font-weight: bold !important;
+}
+
+.Separador {
+	border-top: 1px solid #d6d5d5;
+}
+
+.layout-wrapper .ultima-menu li ul li ul li a {
+	padding-left: 30px !important;
+}
+
+.layout-wrapper .footer {
+	padding: 0 !important;
+}
+
+.bz-bb {
+	-webkit-box-sizing: border-box !important;
+	-moz-box-sizing: border-box !important;
+	box-sizing: border-box !important;
+}
+
+.botonEscondido {
+	color: white !important;
+	text-decoration: none !important;
+	cursor: default !important;
+}
+
+.pb-5px {
+	padding-bottom: 5px;
+}
+
+/* .totales tbody tr:last-child { */
+/* 	background-color: #03A9F4 !important; */
+/* } */
+
+/* .totales tbody tr:last-child input { */
+/* 	background-color: #03A9F4 !important; */
+/* } */
+.totales tbody tr:last-child label, .totales tbody tr:last-child input {
+	font-weight: bold !important;
+	font-size: 1.1em;
+}
+
+.totales tbody tr:last-child td button {
+	visibility: hidden;
+}
+
+.Hidden {
+	visibility: hidden;
+}
+
+.booleanLabel {
+	background-color: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+	color: black !important;
+	opacity: 1 !important;
+}
+
+.calendario20 input {
+	width: 20%;
+}
+
+.calendario35 input {
+	width: 35%;
+}
+
+.calendario40 input {
+	width: 40%;
+}
+
+.calendario50 input {
+	width: 50%;
+}
+
+.calendario55 input {
+	width: 55%;
+}
+
+.calendario65 input {
+	width: 65%;
+}
+
+.calendario70 input {
+	width: 70% !important;
+}
+
+.calendario80 input {
+	width: 80% !important;
+}
+
+.calendario95 input {
+	width: 95% !important;
+}
+
+.calendario100 input {
+	width: 100% !important;
+}
+
+.inputNumber-80 input {
+	width: 80%;
+	font-family: arial !important;
+	text-align: right;
+}
+
+.letraNumero {
+	font-family: Tahoma !important;
+}
+
+.redButton {
+	background-color: #CE2246 !important;
+}
+
+label.formatoNumero {
+	font-family: Tahoma !important;
+	float: right !important;
+}
+
+input.formatoNumero, span.formatoNumero input {
+	font-family: Tahoma !important;
+	text-align: right !important;
+	width: 80% !important;
+	float: right;
+}
+
+.scroll td:nth-child(2), .scroll th:nth-child(2) {
+	width: 300px !important;
+}
+
+.scroll td:nth-child(2) label, .scroll th:nth-child(2) label {
+	float: left !important;
+	white-space: nowrap;
+}
+
+.columnaTotales td:last-child {
+	text-align: right !important;
+}
+
+.subTitulos {
+	border-bottom: 1px solid #dddddc;
+	display: block;
+	margin-bottom: 0.5em;
+	margin-top: 1em;
+	width: 100%;
+}
+
+.m-r-10px {
+	margin-right: 10px;
+}
+
+.columnaTotales tbody td:last-child label {
+	font-weight: bold !important;
+}
+
+body .ui-button .ui-icon {
+	color: #ffffff;
+}
+
+body .ui-button.secondary {
+	color: #ffffff;
+}
+
+/* Color Seleccion de fila en las tablas */
+.ui-datatable table tbody .ui-state-highlight>td {
+	background-color: #003d50;
+	color: #ffffff;
+}
+
+.ui-state-highlight label {
+	color: #ffffff;
+}
+
+table.numeros tbody tr td label {
+	font-family: Tahoma !important;
+	font-size: 1em;
+}
+
+.inputSinFormato table tbody input.ui-inputfield {
+	font-family: Tahoma !important;
+	font-size: 1em;
+	/*background-color: white;*/
+	border: 0;
+	padding: 0 !important;
+	margin: 0;
+	text-align: right !important;
+	float: right;
+	-webkit-box-shadow: 0px 0px 0px white !important;
+}
+
+.ui-columntoggler {
+	overflow-x: hidden;
+	width: 160px;
+}
+
+.inputSinFormato table tbody input.ui-inputfield:focus {
+	border: white !important;
+	padding: 0 !important;
+	margin: 0;
+	outline: 0px;
+	background: none;
+	border-width: 0;
+	border-style: solid;
+	border-color: transparent;
+	-webkit-box-shadow: 0px 0px 0px white !important;
+}
+
+.inputSinFormato tr:nth-child(even) input {
+	/*background-color: #EEF2F7 !important;*/
+	
+}
+
+.botonFila {
+	padding: 1px !important;
+	font-size: 14px;
+	font-family: 'FontAwesome' !important;
+	color: #F1F6F9 !important;
+	border: solid 1px transparent;
+	text-decoration: none !important;
+}
+
+.borderNo {
+	border: none;
+}
+
+.convertirMayuscula {
+	text-transform: uppercase !important;
+}
+
+.convertirMinuscula {
+	text-transform: lowercase !important;
+}
+
+.observacion {
+	white-space: nowrap;
+}
+
+.ui-datepicker-trigger {
+	top: -30px !important;
+	float: right;
+}
+
+.tabView input, .tabView div.ui-selectonemenu {
+	width: 100% !important;
+	text-transform: uppercase !important;
+}
+
+.ui-growl-message {
+	color: white;
+}
+
+body .md-inputfield textarea:focus ~ label, body .md-inputfield textarea.ui-state-filled 
+	 ~ label {
+	top: -20px;
+	font-size: 12px;
+	color: #03A9F4;
+	display: block;
+}
+
+.labelAnimacion {
+	top: -20px !important;
+	font-size: 12px;
+	color: #03A9F4 !important;
+	display: block;
+}
+
+.label {
+	position: relative;
+	top: -45px !important;
+	font-size: 12px;
+	color: #03A9F4 !important;
+	display: block;
+}
+
+.FloatR {
+	float: right;
+}
+
+.FloatL {
+	float: left;
+}
+
+.FloatN {
+	float: none !important;
+}
+
+.PaddingTop5px {
+	position: relative;
+	top: 6px;
+}
+
+.Padding1em {
+	padding: 1em;
+}
+
+.LblRol {
+	display: inline-block;
+	width: 70%;
+	text-align: right;
+}
+
+.TxtRol {
+	display: inline-block;
+	width: 30%;
+	text-align: right;
+}
+
+.LblTituloRol {
+	display: block;
+	text-align: center;
+	font-weight: bold;
+}
+
+.CajaRol {
+	display: inline-block;
+	width: 20%;
+	vertical-align: top;
+}
+
+@media screen and (max-width: 641px) {
+	input, div.ui-selectonemenu, .check, .mobil {
+		width: 100% !important;
+	}
+	.footer, span.footer-text-right, span.footer-text-left {
+		text-align: center !important;
+		float: none !important;
+	}
+	a.imprimir {
+		margin-bottom: 20px
+	}
+}

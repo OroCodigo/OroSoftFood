@@ -1,0 +1,24 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pu="http://primefaces.org/ultima">
+
+	<h:form id="menuform">
+		<div class="layout-menu">
+			<div class="nano">
+				<div class="nano-content menu-scroll-content">
+					<ui:fragment>
+						<div class="profile">
+							<div class="profile-image"></div>
+							<a id="profile-options" href="#"> <span class="profile-name">#{loginBean.nombreUsuario}</span>
+							</a>
+						</div>
+					</ui:fragment>
+					<pu:menu widgetVar="me" model="#{loginBean.model}" />
+				</div>
+			</div>
+		</div>
+	</h:form>
+</ui:composition>

@@ -1,0 +1,116 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+
+		<div class="card" id="panelPrincipal">
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-4 ui-lg-4">
+					<h:form id="formTotal">
+						<h1 class="BigTopic">TOTAL A PAGAR: $
+							#{ventaRestaurantBean.totalesFacturaTO.total}</h1>
+					</h:form>
+				</div>
+				<div class="ui-g-12 ui-md-8 ui-lg-8">
+					<p:commandButton value="Consumidor Final" />
+					<p:commandButton value="Con Datos" />
+					<p:commandButton value="Limpiar" />
+				</div>
+
+				<div class="ui-g-12 ui-md-4 ui-lg-4">
+					<h:form id="formTabla">
+						<p:dataTable var="producto"
+							value="#{ventaRestaurantBean.listaInvVentasDetalleTO}">
+
+							<p:column headerText="Producto" width="60%">
+								<h:outputText value="#{producto.proNombre}" />
+							</p:column>
+
+							<p:column headerText="Precio" width="20%">
+								<h:outputText value="$ #{producto.detPrecio}" />
+							</p:column>
+
+							<p:column headerText="Eliminar" styleClass="TexAlCenter"
+								width="20%">
+								<p:commandLink id="btnEliminar"
+									styleClass="ui-icon ui-icon-delete icono DispInline"
+									actionListener="#{ventaRestaurantBean.eliminarFila(producto)}"
+									update=":formTabla,:formTotales,:formTotal" />
+							</p:column>
+
+						</p:dataTable>
+					</h:form>
+					<h:form id="formTotales">
+						<p:panelGrid columns="2" layout="grid">
+							<p:outputLabel value="SUBTOTAL" />
+							<p:outputLabel
+								value="$ #{ventaRestaurantBean.totalesFacturaTO.subtotal_12}" />
+							<p:outputLabel value="IVA" />
+							<p:outputLabel
+								value="$ #{ventaRestaurantBean.totalesFacturaTO.iva}" />
+							<p:outputLabel value="TOTAL" />
+							<p:outputLabel
+								value="$ #{ventaRestaurantBean.totalesFacturaTO.total}" />
+						</p:panelGrid>
+					</h:form>
+				</div>
+				<div class="ui-g-12 ui-md-8 ui-lg-8">
+					<h:form id="formMenus">
+
+						<p:dataGrid var="menu" layout="grid"
+							value="#{ventaRestaurantBean.listInvMenuComida}"
+							paginator="false" id="menus">
+							<p:commandLink update="formMenus:categorias,formMenus:productos"
+								actionListener="#{ventaRestaurantBean.buscarCategorias(menu.invMenuComidaPK.menCodigo)}">
+
+								<p:panel style="text-align:center">
+									<h:panelGrid columns="1" style="width:100%">
+										<h:outputText value="#{menu.menNombre}" />
+									</h:panelGrid>
+								</p:panel>
+
+							</p:commandLink>
+						</p:dataGrid>
+
+						<p:carousel id="categorias" numVisible="3" circular="true"
+							value="#{ventaRestaurantBean.listInvProductoCategoriaTO}"
+							var="categoria" itemStyle="text-align:center" responsive="true">
+							<p:commandLink update="formMenus:productos"
+								actionListener="#{ventaRestaurantBean.buscarProductos(categoria.catCodigo)}">
+								<p:panelGrid columns="1" style="width:100%;margin:10px 0px"
+									layout="grid" styleClass="ui-panelgrid-blank">
+									<f:facet name="header">
+										<p:graphicImage name="images/comida/01.jpg"
+											style="width: 100px;height:100px;" library="ultima-layout" />
+									</f:facet>
+									<h:outputText value="#{categoria.catDetalle}" />
+								</p:panelGrid>
+							</p:commandLink>
+						</p:carousel>
+
+						<p:dataGrid var="producto" layout="grid"
+							value="#{ventaRestaurantBean.listaProductos}" paginator="false"
+							id="productos">
+							<p:commandLink update=":formTabla,:formTotales,formTotal"
+								actionListener="#{ventaRestaurantBean.agregarProducto(producto)}">
+
+								<p:panel style="text-align:center">
+									<h:panelGrid columns="1" style="width:100%">
+										<h:outputText
+											value="#{producto.prdNombre} - $ #{producto.prdPrecio1}" />
+									</h:panelGrid>
+								</p:panel>
+
+							</p:commandLink>
+						</p:dataGrid>
+
+					</h:form>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>
