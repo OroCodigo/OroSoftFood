@@ -28,7 +28,6 @@ public class CategoriaMenuComidaBean implements Serializable {
 	private String empresa;
 
 	private List<InvMenuComida> listInvMenuComida;
-	private String menuCodigo;
 
 	private List<InvProductoCategoriaTO> listInvProductoCategoriaTO;
 	private InvProductoCategoriaTO invProductoCategoriaTO;
@@ -46,7 +45,6 @@ public class CategoriaMenuComidaBean implements Serializable {
 	public void limpiar() {
 		listEmpresas = SistemaDelegate.getInstance().getEmpresasPorUsuarioItem();
 		empresa = null;
-		menuCodigo = null;
 
 		if (listEmpresas.size() == 1) {
 			empresa = listEmpresas.get(0).getEmpCodigo();
@@ -80,7 +78,6 @@ public class CategoriaMenuComidaBean implements Serializable {
 			invProductoCategoriaTO.setCatCodigo(invProductoCategoriaTO.getCatCodigo().toUpperCase());
 			invProductoCategoriaTO.setCatDetalle(invProductoCategoriaTO.getCatDetalle().toUpperCase());
 			invProductoCategoriaTO.setCatActiva(true);
-			invProductoCategoriaTO.setMenCodigo(menuCodigo);
 			String mensaje = InventarioDelegate.getInstance().accionInvProductoCategoria(invProductoCategoriaTO, 'I');
 			if (mensaje.charAt(0) == 'T') {
 				listInvProductoCategoriaTO.add(invProductoCategoriaTO);
@@ -147,14 +144,6 @@ public class CategoriaMenuComidaBean implements Serializable {
 
 	public void setEmpresa(String empresa) {
 		this.empresa = empresa;
-	}
-
-	public String getMenuCodigo() {
-		return menuCodigo;
-	}
-
-	public void setMenuCodigo(String menuCodigo) {
-		this.menuCodigo = menuCodigo;
 	}
 
 	public List<InvProductoCategoriaTO> getListInvProductoCategoriaTO() {

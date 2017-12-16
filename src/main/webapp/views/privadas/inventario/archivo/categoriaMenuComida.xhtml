@@ -97,7 +97,7 @@
 					</h:panelGroup>
 					<div class="EmptyBox30"></div>
 					<p:selectOneMenu id="comboMenuComida"
-						value="#{categoriaMenuComidaBean.menuCodigo}"
+						value="#{categoriaMenuComidaBean.invProductoCategoriaTO.menCodigo}"
 						styleClass="bz-bb m-w-0 Wid20">
 						<f:selectItem itemLabel="Escoja un Menú" />
 						<f:selectItems
@@ -146,12 +146,12 @@
 					<h:panelGroup styleClass="md-inputfield">
 						<p:inputText id="txtDetalle"
 							value="#{categoriaMenuComidaBean.invProductoCategoriaTO.catDetalle}"
-							styleClass="DispBlock convertirMayuscula Wid20" readonly="true" />
+							styleClass="DispBlock convertirMayuscula Wid20" />
 						<p:outputLabel value="Nombre" for="txtDetalle" />
 					</h:panelGroup>
 					<div class="EmptyBox40"></div>
 					<p:selectOneMenu id="comboMenuComida"
-						value="#{categoriaMenuComidaBean.menuCodigo}"
+						value="#{categoriaMenuComidaBean.invProductoCategoriaTO.menCodigo}"
 						styleClass="bz-bb m-w-0 Wid20">
 						<f:selectItem itemLabel="Escoja un Menú" />
 						<f:selectItems
