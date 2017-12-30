@@ -16,7 +16,8 @@
 					</h:form>
 				</div>
 				<div class="ui-g-12 ui-md-8 ui-lg-8">
-					<p:commandButton value="Consumidor Final" />
+					<p:commandButton value="Consumidor Final"
+						oncomplete="PF('dialogPago').show()" />
 					<p:commandButton value="Con Datos" />
 					<p:commandButton value="Limpiar" />
 				</div>
@@ -39,20 +40,26 @@
 								<p:commandLink id="btnEliminar"
 									styleClass="ui-icon ui-icon-delete icono DispInline"
 									actionListener="#{ventaRestaurantBean.eliminarFila(producto)}"
-									update=":formTabla,:formTotales,:formTotal" />
+									update=":formTabla,:formTotales,:formTotal,:formPago" />
 							</p:column>
 
 						</p:dataTable>
 					</h:form>
 					<h:form id="formTotales">
 						<p:panelGrid columns="2" layout="grid">
-							<p:outputLabel value="SUBTOTAL" />
+							<p:outputLabel value="SUBTOTAL 0%" styleClass="negrita" />
+							<p:outputLabel
+								value="$ #{ventaRestaurantBean.totalesFacturaTO.subtotal_0}" />
+
+							<p:outputLabel value="SUBTOTAL 12%" styleClass="negrita" />
 							<p:outputLabel
 								value="$ #{ventaRestaurantBean.totalesFacturaTO.subtotal_12}" />
-							<p:outputLabel value="IVA" />
+
+							<p:outputLabel value="IVA 12%" styleClass="negrita" />
 							<p:outputLabel
 								value="$ #{ventaRestaurantBean.totalesFacturaTO.iva}" />
-							<p:outputLabel value="TOTAL" />
+
+							<p:outputLabel value="TOTAL" styleClass="negrita" />
 							<p:outputLabel
 								value="$ #{ventaRestaurantBean.totalesFacturaTO.total}" />
 						</p:panelGrid>
@@ -95,7 +102,8 @@
 						<p:dataGrid var="producto" layout="grid"
 							value="#{ventaRestaurantBean.listaProductos}" paginator="false"
 							id="productos">
-							<p:commandLink update=":formTabla,:formTotales,formTotal"
+							<p:commandLink
+								update=":formTabla,:formTotales,formTotal,:formPago"
 								actionListener="#{ventaRestaurantBean.agregarProducto(producto)}">
 
 								<p:panel style="text-align:center">
@@ -112,5 +120,36 @@
 				</div>
 			</div>
 		</div>
+
+		<h:form id="formPago">
+			<p:dialog
+				header="TOTAL A PAGAR: $
+							#{ventaRestaurantBean.totalesFacturaTO.total}"
+				id="pago" widgetVar="dialogPago" width="30%" modal="true"
+				resizable="false" closable="false">
+				<h:panelGrid columns="2" style="width:100%">
+					<p:outputLabel value="Cliente:" styleClass="negrita" />
+					<p:outputLabel value="Consumidor Final" />
+					<p:outputLabel value="Valor Recibido:" styleClass="negrita" />
+					<p:inputNumber value="#{ventaRestaurantBean.montoRecibido}"
+						onkeypress="return false;">
+						<p:ajax event="keyup" update="cambio"
+							listener="#{ventaRestaurantBean.calcularCambio}" />
+					</p:inputNumber>
+					<p:outputLabel value="Cambio:" styleClass="negrita" />
+					<p:outputLabel id="cambio"
+						value="#{ventaRestaurantBean.montoCambio}" />
+				</h:panelGrid>
+				<div class="EmptyBox20"></div>
+				<div class="TexAlCenter">
+					<p:commandButton id="btnGuardar" value="Guardar"
+						style="margin-left: 10px !important;" icon="ui-icon-check"
+						update=":mensaje" />
+					<p:commandButton id="btnCancelar" value="Cancelar"
+						styleClass="secondary" onclick="PF('dialogPago').hide()"
+						style="margin-left: 10px !important;" icon="ui-icon-close" />
+				</div>
+			</p:dialog>
+		</h:form>
 	</ui:define>
 </ui:composition>

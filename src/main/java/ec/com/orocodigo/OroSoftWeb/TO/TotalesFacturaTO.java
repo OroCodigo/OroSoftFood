@@ -9,7 +9,9 @@ public class TotalesFacturaTO implements Serializable {
 
 	private BigDecimal subtotal_0;
 	private BigDecimal subtotal_12;
+	private BigDecimal subtotal;
 	private BigDecimal iva;
+	private String ivaLabel;
 	private BigDecimal total;
 
 	public TotalesFacturaTO() {
@@ -46,6 +48,22 @@ public class TotalesFacturaTO implements Serializable {
 
 	public void setTotal(BigDecimal total) {
 		this.total = total;
+	}
+
+	public BigDecimal getSubtotal() {
+		return subtotal;
+	}
+
+	public void setSubtotal(BigDecimal subtotal) {
+		this.subtotal = subtotal;
+	}
+
+	public String getIvaLabel() {
+		return ivaLabel;
+	}
+
+	public void setIvaLabel(String ivaLabel) {
+		this.ivaLabel = ivaLabel;
 	}
 
 }
