@@ -2,6 +2,7 @@ package ec.com.orocodigo.OroSoftWeb.controller.inventario;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,7 @@ import ec.com.orocodigo.OroSoftUtils.MensajeTO;
 import ec.com.orocodigo.OroSoftUtils.UtilsDate;
 import ec.com.orocodigo.OroSoftUtils.UtilsValidacion;
 import ec.com.orocodigo.OroSoftUtils.anexos.TO.AnxNumeracionLineaTO;
+import ec.com.orocodigo.OroSoftUtils.anexos.TO.AnxTipoComprobanteComboTO;
 import ec.com.orocodigo.OroSoftUtils.inventario.TO.InvFunListadoProductosTO;
 import ec.com.orocodigo.OroSoftUtils.inventario.TO.InvProductoCategoriaTO;
 import ec.com.orocodigo.OroSoftUtils.inventario.TO.InvVentasDetalleTO;
@@ -66,6 +68,7 @@ public class VentaRestaurantBean {
 	private AnxNumeracionLineaTO anxNumeracionLineaTO;
 
 	private final BigDecimal CERO = new BigDecimal("0.00");
+	private List<NumeracionTipoDocumentoVenta> listaNumeracionTipoDocumentoVenta = new ArrayList();
 
 	public VentaRestaurantBean() {
 	}
@@ -89,12 +92,15 @@ public class VentaRestaurantBean {
 
 		if (numeroFactura != null)
 			try {
+				final AnxTipoComprobanteComboTO anxTipoComprobanteComboTO = anexosBBTipoComprobanteCombo1
+						.getListaAnxTipoComprobanteComboTO().get(jcboTipoDocumento.getSelectedIndex());
+				// nombreReporte = anxTipoComprobanteComboTO.getTcRutaReporte();
+				listaNumeracionTipoDocumentoVenta = ultimoSecuencial("18");
+
 				if (!isComprobanteElectronica) {
-					anxNumeracionLineaTO = AnexosDelegate.getInstance().getNumeroAutorizacion(
-							sisUsuarioEmpresaTO.getEmpCodigo(),
+					anxNumeracionLineaTO = AnexosDelegate.getInstance().getNumeroAutorizacion(empresa,
 							numeroFactura == null ? "" : numeroFactura.toString().toString(), "18",
-							"'" + UtilsValidacion.fecha(jftfFechaEmision.getText().trim(), "dd-MM-yyyy", "yyyy-MM-dd")
-									+ "'");
+							"'" + LocalDate.now().toString() + "'");
 
 					if (anxNumeracionLineaTO == null) {
 						numeroAutorizacion = "";
@@ -243,8 +249,8 @@ public class VentaRestaurantBean {
 				if (!"18".equals("00"))
 					try {
 						anxNumeracionLineaTO = AnexosDelegate.getInstance().getNumeroAutorizacion(empresa,
-								numeroFactura == null ? "" : numeroFactura, "18", "'" + UtilsValidacion
-										.fecha(jftfFechaEmision.getText().trim(), "dd-MM-yyyy", "yyyy-MM-dd") + "'");
+								numeroFactura == null ? "" : numeroFactura, "18",
+								"'" + LocalDate.now().toString() + "'");
 					} catch (final Exception e) {
 						UtilsExcepciones.enviarError(e, getClass().getName());
 					}
@@ -358,15 +364,12 @@ public class VentaRestaurantBean {
 																	mensajeTO.getMensaje().substring(1));
 														else
 															UtilAplication.presentaMensaje(FacesMessage.SEVERITY_INFO,
-																	mensajeTO.getMensaje().substring(1),
-																	mensajeTO.getListaErrores1());
+																	mensajeTO.getMensaje().substring(1)
+																			+ mensajeTO.getListaErrores1());
 														if (mensajeTO.getMensaje().equals(
 																"F<html>El Número de Documento que ingresó ya existe...\nIntente de nuevo o contacte con el administrador</html>")) {
-															actualizarSecuencias(codigoTipoComprobante,
-																	jftfNumeroDocumento.getValue() == null ? ""
-																			: jftfNumeroDocumento.getValue()
-																					.toString());
-															escogerTipoDocumento();
+															actualizarSecuencias("18",
+																	numeroFactura == null ? "" : numeroFactura);
 														}
 													}
 												}
@@ -619,6 +622,46 @@ public class VentaRestaurantBean {
 			ivaVigente = ivaVigente == null ? CERO : ivaVigente;
 			totalesFacturaTO.setIvaLabel("IVA " + ivaVigente + "%:");
 			montoMaximoConsumidorFinal = AnexosDelegate.getInstance().getValorAnxMontoMaximoConsumidorFinalTO(fecha);
+		} catch (final Exception e) {
+			UtilsExcepciones.enviarError(e, getClass().getName());
+		}
+	}
+
+	private void actualizarSecuencias(final String tipoDocumento, final String numeroDocumento) {
+		try {
+			if (!"00".equals("18"))
+				if (listaNumeracionTipoDocumentoVenta.size() > 0) {
+					boolean crear = false;
+					for (int i = 0; i < listaNumeracionTipoDocumentoVenta.size(); i++)
+						if (listaNumeracionTipoDocumentoVenta.get(i).getCodigoTipoDocumento().equals(tipoDocumento)) {
+							final String separado = numeroDocumento.trim().substring(0,
+									numeroDocumento.trim().lastIndexOf("-") + 1);
+							final int numero = Integer.parseInt(
+									numeroDocumento.trim().substring(numeroDocumento.trim().lastIndexOf("-") + 2));
+							listaNumeracionTipoDocumentoVenta.set(i,
+									new NumeracionTipoDocumentoVenta(
+											listaNumeracionTipoDocumentoVenta.get(i).getCodigoTipoDocumento(), separado,
+											numero));
+							i = listaNumeracionTipoDocumentoVenta.size();
+							crear = false;
+						} else
+							crear = true;
+					if (crear) {
+						final String separado = numeroDocumento.trim().substring(0,
+								numeroDocumento.trim().lastIndexOf("-") + 1);
+						final int numero = Integer.parseInt(
+								numeroDocumento.trim().substring(numeroDocumento.trim().lastIndexOf("-") + 2));
+						listaNumeracionTipoDocumentoVenta
+								.add(new NumeracionTipoDocumentoVenta(tipoDocumento, separado, numero));
+					}
+				} else {
+					final String separado = numeroDocumento.trim().substring(0,
+							numeroDocumento.trim().lastIndexOf("-") + 1);
+					final int numero = Integer
+							.parseInt(numeroDocumento.trim().substring(numeroDocumento.trim().lastIndexOf("-") + 2));
+					listaNumeracionTipoDocumentoVenta
+							.add(new NumeracionTipoDocumentoVenta(tipoDocumento, separado, numero));
+				}
 		} catch (final Exception e) {
 			UtilsExcepciones.enviarError(e, getClass().getName());
 		}
