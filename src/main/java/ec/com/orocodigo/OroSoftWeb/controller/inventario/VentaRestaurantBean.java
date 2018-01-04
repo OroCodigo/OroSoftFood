@@ -13,15 +13,14 @@ import javax.faces.application.FacesMessage;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import ec.com.orocodigo.OroSoftDesktop.util.FormatoDocumentoCorrecto;
 import ec.com.orocodigo.OroSoftUtils.MensajeTO;
-import ec.com.orocodigo.OroSoftUtils.UtilsDate;
+import ec.com.orocodigo.OroSoftUtils.UtilsAplicacion;
 import ec.com.orocodigo.OroSoftUtils.UtilsValidacion;
 import ec.com.orocodigo.OroSoftUtils.anexos.TO.AnxNumeracionLineaTO;
-import ec.com.orocodigo.OroSoftUtils.anexos.TO.AnxTipoComprobanteComboTO;
 import ec.com.orocodigo.OroSoftUtils.inventario.TO.InvFunListadoProductosTO;
 import ec.com.orocodigo.OroSoftUtils.inventario.TO.InvProductoCategoriaTO;
 import ec.com.orocodigo.OroSoftUtils.inventario.TO.InvVentasDetalleTO;
+import ec.com.orocodigo.OroSoftUtils.inventario.TO.InvVentasTO;
 import ec.com.orocodigo.OroSoftUtils.inventario.entity.InvMenuComida;
 import ec.com.orocodigo.OroSoftUtils.sistema.entity.SisEmpresa;
 import ec.com.orocodigo.OroSoftUtils.sri.util.TipoComprobanteEnum;
@@ -70,6 +69,9 @@ public class VentaRestaurantBean {
 	private final BigDecimal CERO = new BigDecimal("0.00");
 	private List<NumeracionTipoDocumentoVenta> listaNumeracionTipoDocumentoVenta = new ArrayList();
 
+	private InvVentasTO invVentasTO;
+	private List<String> lista;
+
 	public VentaRestaurantBean() {
 	}
 
@@ -92,8 +94,6 @@ public class VentaRestaurantBean {
 
 		if (numeroFactura != null)
 			try {
-				final AnxTipoComprobanteComboTO anxTipoComprobanteComboTO = anexosBBTipoComprobanteCombo1
-						.getListaAnxTipoComprobanteComboTO().get(jcboTipoDocumento.getSelectedIndex());
 				// nombreReporte = anxTipoComprobanteComboTO.getTcRutaReporte();
 				listaNumeracionTipoDocumentoVenta = ultimoSecuencial("18");
 
@@ -220,11 +220,7 @@ public class VentaRestaurantBean {
 			} else if (numeroAutorizacion.trim().compareToIgnoreCase("ANULADO") == 0) {
 				UtilAplication.presentaMensaje(FacesMessage.SEVERITY_INFO,
 						"El Número de Documento que ingreso esta ANULADO.");
-			} else if (UtilsDate.fechaFormatoDate(fechaVencimiento, "dd-MM-yyyy").getTime() < UtilsDate
-					.fechaFormatoDate(jftfFechaEmision.getText(), "dd-MM-yyyy").getTime()) {
-				UtilAplication.presentaMensaje(FacesMessage.SEVERITY_INFO,
-						"La Fecha de Vencimiento no puede ser menor que la Fecha de Emisión");
-			} else if (!FormatoDocumentoCorrecto.DocumentoCorrecto(jftfNumeroDocumento.getText().toString())) {
+			} else if (!documentoCorrecto(numeroFactura)) {
 				UtilAplication.presentaMensaje(FacesMessage.SEVERITY_INFO,
 						"Número de documento mal ingresado\nIngrese con este formato: 001-001-000000001");
 			} else {
@@ -240,12 +236,6 @@ public class VentaRestaurantBean {
 				} else
 					anxNumeracionLineaTO = null;
 				puedeSeguir = true;
-				if (anxNumeracionLineaTO != null) {
-					if (calculosGeneralesVentas.filasUnidadBulto() <= anxNumeracionLineaTO.getNumeroLineas())
-						puedeSeguir = true;
-					else
-						puedeSeguir = false;
-				}
 				if (!"18".equals("00"))
 					try {
 						anxNumeracionLineaTO = AnexosDelegate.getInstance().getNumeroAutorizacion(empresa,
@@ -255,16 +245,16 @@ public class VentaRestaurantBean {
 						UtilsExcepciones.enviarError(e, getClass().getName());
 					}
 				puedeSeguir = true;
-				if (anxNumeracionLineaTO != null)
-					if (calculosGeneralesVentas.filasUnidadBulto() <= anxNumeracionLineaTO.getNumeroLineas())
-						puedeSeguir = true;
-					else
-						puedeSeguir = false;
+				// if (anxNumeracionLineaTO != null)
+				// if (calculosGeneralesVentas.filasUnidadBulto() <=
+				// anxNumeracionLineaTO.getNumeroLineas())
+				// puedeSeguir = true;
+				// else
+				// puedeSeguir = false;
 
 				if (!puedeSeguir) {
 					UtilAplication.presentaMensaje(FacesMessage.SEVERITY_INFO,
 							"El número de líneas es mayor al número de productos ingresados. Corrija el error.");
-					jtblDetalle.requestFocus();
 				} else if (codigoVentaMotivo.trim().isEmpty() || jtfCliente.getText().trim().isEmpty()
 						|| codigoTipoComprobante.trim().isEmpty()) {
 					UtilAplication.presentaMensaje(FacesMessage.SEVERITY_INFO,
@@ -667,6 +657,250 @@ public class VentaRestaurantBean {
 		}
 	}
 
+	private void llenarObjetoTO() {
+		invVentasTO = new InvVentasTO();
+		invVentasTO.setVtaEmpresa(empresa);
+		invVentasTO.setVtaPeriodo(LocalDate.now().toString());
+		invVentasTO.setVtaMotivo("001");
+		invVentasTO.setVtaNumero("numeroVenta");
+		invVentasTO.setVtaNumeroAlterno("0000000");
+		invVentasTO.setVtaDocumentoTipo("18");
+		invVentasTO.setVtaDocumentoNumero(numeroFactura);
+		invVentasTO.setVtaFecha(LocalDate.now().toString());
+		invVentasTO.setVtaFechaVencimiento(LocalDate.now().toString());
+
+		invVentasTO.setVtaIvaVigente(ivaVigente);
+		invVentasTO.setVtaObservaciones("");
+		// Informacion adicional facturacion electronica
+		// llenarInformacionAdicional();
+		invVentasTO.setVtaInformacionAdicional("");
+		invVentasTO.setVtaPendiente(false);
+		invVentasTO.setVtaRevisado(false);
+		invVentasTO.setVtaAnulado(false);
+		lista = UtilsValidacion.separar(
+				tipoFormaPago.trim().equals("POR PAGAR") ? " | " + tipoFormaPago.trim() : tipoFormaPago.trim(), "|");
+		invVentasTO.setVtaFormaPago(lista.isEmpty() ? "" : lista.get(1));
+
+		invVentasTO.setVtaBase0(parcialCeroTotal);/// <<--jtfParcialCero
+		invVentasTO.setVtaBaseImponible(parcialImponibleTotal);// <<--jtfParcialImponible
+		invVentasTO.setVtaBaseNoObjeto(cero);//
+		invVentasTO.setVtaBaseExenta(cero);//
+
+		invVentasTO.setVtaRecargoBase0(recargoBaseCero);
+		invVentasTO.setVtaRecargoBaseImponible(recargoBaseImponible);
+		invVentasTO.setVtaDescuentoBase0(descuentoBaseCero);
+		invVentasTO.setVtaDescuentoBaseImponible(descuentoBaseImponible);
+		invVentasTO.setVtaDescuentoBaseNoObjeto(cero);
+		invVentasTO.setVtaDescuentoBaseExenta(cero);
+
+		invVentasTO.setVtaSubtotalBase0(subtotalBaseCero);// <<---jtfSubtotalCero
+		invVentasTO.setVtaSubtotalBaseImponible(subtotalBaseImponible);// <<---
+																		// jtfSubtotalImponible
+		invVentasTO.setVtaSubtotalBaseExenta(cero);// <<--- jtfSubtotalImponible
+		invVentasTO.setVtaSubtotalBaseNoObjeto(cero);// <<---
+														// jtfSubtotalImponible
+		invVentasTO.setVtaMontoIva(ivaTotal);// <<-- jtfIva
+
+		invVentasTO.setVtaTotal(jtfTotal.getText().trim().isEmpty() ? cero : new BigDecimal(jtfTotal.getText()));
+		invVentasTO.setCliEmpresa(invVentasTO.getVtaEmpresa());
+		invVentasTO.setCliCodigo(jtfCliente.getText().trim());
+		invVentasTO.setSecEmpresa(invVentasTO.getVtaEmpresa());
+		invVentasTO.setSecCodigo(codigoSector);
+		invVentasTO.setConEmpresa(sisUsuarioEmpresaTO.getEmpCodigo());
+		invVentasTO.setConPeriodo(null);
+		invVentasTO.setConTipo(null);
+		invVentasTO.setConNumero(null);
+		invVentasTO.setVendEmpresa(sisUsuarioEmpresaTO.getEmpCodigo());
+		invVentasTO.setVendCodigo(codigoVendedor);
+
+		invVentasTO.setUsrEmpresa(invVentasTO.getVtaEmpresa());
+		invVentasTO.setUsrCodigo(sisUsuarioEmpresaTO.getUsrCodigo());
+	}
+
+	public static boolean documentoCorrecto(final String documento) {
+
+		System.out.println(documento);
+
+		boolean primeroComp = false;
+		boolean segundoComp = false;
+		boolean terceroComp = false;
+
+		final int primero = Integer.parseInt(documento.substring(0, 3).equals("___") ? "0" : documento.substring(0, 3));
+		final int segundo = Integer.parseInt(documento.substring(4, 7).equals("___") ? "0" : documento.substring(4, 7));
+		final int tercero = Integer.parseInt(documento.substring(8).equals("_________") ? "0" : documento.substring(8));
+
+		if (primero > 0) {
+			primeroComp = true;
+			if (segundo > 0) {
+				segundoComp = true;
+				if (tercero > 0)
+					terceroComp = true;
+			}
+		}
+
+		System.out.println(primeroComp);
+		System.out.println(segundoComp);
+		System.out.println(terceroComp);
+
+		return primeroComp && segundoComp && terceroComp;
+	}
+
+	private boolean llenarDetalleTO() {
+		boolean comprobarDetalle = false;
+		listaInvVentasDetalleTO = new ArrayList();
+
+		for (int i = 0; i < jtblDetalle.getRowCount(); i++)
+			if (new BigDecimal(jtblDetalle.getValueAt(i, buscarColumna("Total")).toString())
+					.compareTo(UtilsAplicacion.cero) > 0) {
+				if (new BigDecimal(jtblDetalle.getValueAt(i, buscarColumna("Precio")).toString())
+						.compareTo(UtilsAplicacion.cero) > 0) {
+					final InvVentasDetalleTO invVentasDetalleTO = new InvVentasDetalleTO();
+
+					invVentasDetalleTO.setDetSecuencia(0);
+					invVentasDetalleTO.setDetOrden(i + 1);
+					invVentasDetalleTO.setDetPendiente(buscarColumna("Pendiente") == -1 ? false
+							: jtblDetalle.getValueAt(i, buscarColumna("Pendiente")).toString().trim().isEmpty() ? false
+									: Boolean
+											.valueOf(jtblDetalle.getValueAt(i, buscarColumna("Pendiente")).toString()));
+					invVentasDetalleTO.setDetCantidad(
+							new BigDecimal(jtblDetalle.getValueAt(i, buscarColumna("Cantidad")).toString()));
+					invVentasDetalleTO.setDetPrecio(
+							new BigDecimal(jtblDetalle.getValueAt(i, buscarColumna("Precio")).toString()));
+					invVentasDetalleTO.setDetPorcentajeRecargo(new BigDecimal(
+							jtblDetalle.getValueAt(i, buscarColumna("Recargo")).toString().isEmpty() ? "0"
+									: jtblDetalle.getValueAt(i, buscarColumna("Recargo")).toString()));
+					invVentasDetalleTO.setDetPorcentajeDescuento(new BigDecimal(
+							jtblDetalle.getValueAt(i, buscarColumna("Descuento")).toString().isEmpty() ? "0"
+									: jtblDetalle.getValueAt(i, buscarColumna("Descuento")).toString()));
+					invVentasDetalleTO.setBodEmpresa(invVentasTO.getVtaEmpresa());
+					invVentasDetalleTO.setProEmpresa(invVentasTO.getVtaEmpresa());
+					invVentasDetalleTO
+							.setProCodigoPrincipal(jtblDetalle.getValueAt(i, buscarColumna("Producto")).toString());
+					invVentasDetalleTO
+							.setProNombre(jtblDetalle.getValueAt(i, buscarColumna("Nombre")).toString().trim());
+					invVentasDetalleTO.setSecEmpresa(invVentasTO.getVtaEmpresa());
+
+					if (!sisUsuarioEmpresaTO.getEmpActividad().equals("COMERCIAL")
+							&& !sisUsuarioEmpresaTO.getEmpActividad().equals("COMISARIATO")) {
+						invVentasDetalleTO.setBodCodigo(jtblDetalle.getValueAt(i, buscarColumna("Bodega")).toString());
+						invVentasDetalleTO.setSecCodigo(jtblDetalle.getValueAt(i, buscarColumna("CP")).toString());
+						invVentasDetalleTO
+								.setPisNumero(!jtblDetalle.getValueAt(i, buscarColumna("CC")).toString().isEmpty()
+										? jtblDetalle.getValueAt(i, buscarColumna("CC")).toString() : null);
+						invVentasDetalleTO.setPisSector(jtblDetalle.getValueAt(i, buscarColumna("CP")).toString());
+					} else {
+						invVentasDetalleTO.setBodCodigo(Bodega);
+						invVentasDetalleTO.setSecCodigo(CP);
+						invVentasDetalleTO.setPisSector(CP);
+						invVentasDetalleTO.setPisNumero(null);
+
+					}
+
+					invVentasDetalleTO.setPisEmpresa(invVentasTO.getVtaEmpresa());
+
+					invVentasDetalleTO.setVtaEmpresa(invVentasTO.getVtaEmpresa());
+					invVentasDetalleTO.setVtaPeriodo(invVentasTO.getVtaPeriodo());
+					invVentasDetalleTO.setVtaMotivo(invVentasTO.getVtaMotivo());
+					invVentasDetalleTO.setVtaNumero(invVentasTO.getVtaNumero());
+
+					invVentasDetalleTO
+							.setProEstadoIva(jtblDetalle.getValueAt(i, buscarColumna("EstadoIVA")).toString());
+					invVentasDetalleTO.setProTipo(jtblDetalle.getValueAt(i, buscarColumna("ProductoTipo")).toString());
+
+					/* campos para el xml de la Faxctura Electronica */
+					invVentasDetalleTO
+							.setVtIva(Boolean.valueOf(jtblDetalle.getValueAt(i, buscarColumna("IVA?")).toString()));
+					invVentasDetalleTO.setVtCodigoPorcentaje(
+							Boolean.valueOf(jtblDetalle.getValueAt(i, buscarColumna("IVA?")).toString()) ? "2" : "0");
+					invVentasDetalleTO.setProMedida(jtblDetalle.getValueAt(i, buscarColumna("Medida")).toString());
+
+					////////////////////////////////////////////////
+					listaInvVentasDetalleTO.add(invVentasDetalleTO);
+					comprobarDetalle = true;
+				} else if (UtilsMensaje.showOptionDialogQuestion(
+						"El precio del producto " + jtblDetalle.getValueAt(i, buscarColumna("Nombre")).toString()
+								+ " de la línea " + (i + 1) + " tiene un valor de 0 (cero).\nDesea continuar?")) {
+					final InvVentasDetalleTO invVentasDetalleTO = new InvVentasDetalleTO();
+					invVentasDetalleTO.setDetSecuencia(0);
+					invVentasDetalleTO.setDetOrden(i + 1);
+					invVentasDetalleTO.setDetPendiente(buscarColumna("Pendiente") == -1 ? false
+							: jtblDetalle.getValueAt(i, buscarColumna("Pendiente")).toString().trim().isEmpty() ? false
+									: Boolean
+											.valueOf(jtblDetalle.getValueAt(i, buscarColumna("Pendiente")).toString()));
+					invVentasDetalleTO.setDetCantidad(
+							new BigDecimal(jtblDetalle.getValueAt(i, buscarColumna("Cantidad")).toString()));
+					invVentasDetalleTO.setDetPrecio(
+							new BigDecimal(jtblDetalle.getValueAt(i, buscarColumna("Precio")).toString()));
+					invVentasDetalleTO.setDetPorcentajeRecargo(new BigDecimal(
+							jtblDetalle.getValueAt(i, buscarColumna("Recargo")).toString().isEmpty() ? "0"
+									: jtblDetalle.getValueAt(i, buscarColumna("Recargo")).toString()));
+					invVentasDetalleTO.setDetPorcentajeDescuento(new BigDecimal(
+							jtblDetalle.getValueAt(i, buscarColumna("Descuento")).toString().isEmpty() ? "0"
+									: jtblDetalle.getValueAt(i, buscarColumna("Descuento")).toString()));
+					invVentasDetalleTO.setBodEmpresa(invVentasTO.getVtaEmpresa());
+					if (!sisUsuarioEmpresaTO.getEmpActividad().equals("COMERCIAL")
+							&& !sisUsuarioEmpresaTO.getEmpActividad().equals("COMISARIATO")) {
+						invVentasDetalleTO.setBodCodigo(jtblDetalle.getValueAt(i, buscarColumna("Bodega")).toString());
+						invVentasDetalleTO.setSecCodigo(jtblDetalle.getValueAt(i, buscarColumna("CP")).toString());
+						invVentasDetalleTO.setPisSector(jtblDetalle.getValueAt(i, buscarColumna("CP")).toString());
+						invVentasDetalleTO
+								.setPisNumero(!jtblDetalle.getValueAt(i, buscarColumna("CC")).toString().isEmpty()
+										? jtblDetalle.getValueAt(i, buscarColumna("CC")).toString() : null);
+
+					} else {
+						invVentasDetalleTO.setBodCodigo(Bodega);
+						invVentasDetalleTO.setSecCodigo(CP);
+						invVentasDetalleTO.setPisSector(CP);
+						invVentasDetalleTO.setPisNumero(null);
+					}
+					invVentasDetalleTO.setProEmpresa(invVentasTO.getVtaEmpresa());
+					invVentasDetalleTO
+							.setProCodigoPrincipal(jtblDetalle.getValueAt(i, buscarColumna("Producto")).toString());
+					invVentasDetalleTO
+							.setProNombre(jtblDetalle.getValueAt(i, buscarColumna("Nombre")).toString().trim());
+					invVentasDetalleTO.setSecEmpresa(invVentasTO.getVtaEmpresa());
+					invVentasDetalleTO.setPisEmpresa(invVentasTO.getVtaEmpresa());
+
+					invVentasDetalleTO.setVtaEmpresa(invVentasTO.getVtaEmpresa());
+					invVentasDetalleTO.setVtaPeriodo(invVentasTO.getVtaPeriodo());
+					invVentasDetalleTO.setVtaMotivo(invVentasTO.getVtaMotivo());
+					invVentasDetalleTO.setVtaNumero(invVentasTO.getVtaNumero());
+					/* campor para el xml de la Faxctura Electronica */
+					invVentasDetalleTO.setProMedida(jtblDetalle.getValueAt(i, buscarColumna("Medida")).toString());
+					invVentasDetalleTO
+							.setVtIva(Boolean.valueOf(jtblDetalle.getValueAt(i, buscarColumna("IVA?")).toString()));
+					invVentasDetalleTO.setVtCodigoPorcentaje(
+							Boolean.valueOf(jtblDetalle.getValueAt(i, buscarColumna("IVA?")).toString()) ? "2" : "0");
+					invVentasDetalleTO
+							.setProEstadoIva(jtblDetalle.getValueAt(i, buscarColumna("EstadoIVA")).toString());
+					invVentasDetalleTO.setProTipo(jtblDetalle.getValueAt(i, buscarColumna("ProductoTipo")).toString());
+					listaInvVentasDetalleTO.add(invVentasDetalleTO);
+					comprobarDetalle = true;
+				} else {
+					i = jtblDetalle.getRowCount();
+					jtblDetalle.requestFocus();
+					jtblDetalle.changeSelection(0, 0, false, false);
+					comprobarDetalle = false;
+				}
+			} else {
+				UtilsMensaje.showDialogInformation("Uno de los subtotales de la línea " + (i + 1)
+						+ " tiene valor de cero (0). Revise la información.");
+				i = jtblDetalle.getRowCount();
+				jtblDetalle.requestFocus();
+				jtblDetalle.changeSelection(0, 0, false, false);
+				comprobarDetalle = false;
+			}
+	}else
+
+	{
+		i = jtblDetalle.getRowCount();
+		UtilsMensaje.showDialogInformation("Detalle mal ingresado. Revise la información");
+		jtblDetalle.requestFocus();
+		jtblDetalle.changeSelection(0, 0, false, false);
+		comprobarDetalle = false;
+	}return comprobarDetalle;
+	}
+
 	// GETTERS Y SETTERS
 
 	public List<SisEmpresa> getListEmpresas() {
@@ -771,6 +1005,22 @@ public class VentaRestaurantBean {
 
 	public void setNumeroAuxiliarFactura(String numeroAuxiliarFactura) {
 		this.numeroAuxiliarFactura = numeroAuxiliarFactura;
+	}
+
+	public InvVentasTO getInvVentasTO() {
+		return invVentasTO;
+	}
+
+	public void setInvVentasTO(InvVentasTO invVentasTO) {
+		this.invVentasTO = invVentasTO;
+	}
+
+	public List<String> getLista() {
+		return lista;
+	}
+
+	public void setLista(List<String> lista) {
+		this.lista = lista;
 	}
 
 }
